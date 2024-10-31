@@ -17,6 +17,7 @@ import datetime
 import json
 from typing import Dict
 from typing import Optional
+import os
 
 from clusterfuzz._internal.base import tasks
 from clusterfuzz._internal.base import utils
@@ -24,6 +25,7 @@ from clusterfuzz._internal.bot import testcase_manager
 from clusterfuzz._internal.bot.fuzzers import engine_common
 from clusterfuzz._internal.bot.tasks import setup
 from clusterfuzz._internal.bot.tasks import task_creation
+from clusterfuzz._internal.bot.tasks.commons import testcase_utils
 from clusterfuzz._internal.bot.tasks.utasks import uworker_handle_errors
 from clusterfuzz._internal.bot.tasks.utasks import uworker_io
 from clusterfuzz._internal.build_management import build_manager
@@ -34,6 +36,7 @@ from clusterfuzz._internal.datastore import data_handler
 from clusterfuzz._internal.datastore import data_types
 from clusterfuzz._internal.fuzzing import leak_blacklist
 from clusterfuzz._internal.metrics import logs
+from clusterfuzz._internal.metrics import monitoring_metrics
 from clusterfuzz._internal.protos import uworker_msg_pb2
 from clusterfuzz._internal.system import environment
 
@@ -308,6 +311,12 @@ def utask_preprocess(testcase_id, job_type, uworker_env):
   testcase_upload_metadata.bot_name = environment.get_value('BOT_NAME')
   testcase_upload_metadata.timestamp = datetime.datetime.utcnow()
   testcase_upload_metadata.put()
+
+  # Emmits a TESTCASE_TRIAGE_DURATION metric, in order to track the time
+  # elapsed between testcase upload and pulling the task from the queue.
+
+  testcase_utils.emit_testcase_triage_duration_metric(
+    testcase_upload_metadata.timestamp, 'analyze_launched')
 
   initialize_testcase_for_main(testcase, job_type)
 
