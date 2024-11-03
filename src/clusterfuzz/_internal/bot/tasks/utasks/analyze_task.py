@@ -16,7 +16,6 @@
 import datetime
 import json
 from typing import Dict
-from typing import Optional
 
 from clusterfuzz._internal.base import tasks
 from clusterfuzz._internal.base import utils
@@ -80,7 +79,7 @@ def handle_analyze_no_revisions_list_error(output):
 
 
 def setup_build(testcase: data_types.Testcase, bad_revisions,
-                fuzz_target) -> Optional[uworker_msg_pb2.Output]:  # pylint: disable=no-member
+                fuzz_target) -> uworker_msg_pb2.Output | None:  # pylint: disable=no-member
   """Set up a custom or regular build based on revision. For regular builds,
   if a provided revision is not found, set up a build with the
   closest revision <= provided revision."""
@@ -143,7 +142,7 @@ def prepare_env_for_main(testcase_upload_metadata):
 
 def setup_testcase_and_build(
     testcase, job_type, setup_input, bad_revisions,
-    fuzz_target) -> (Optional[str], Optional[uworker_msg_pb2.Output]):  # pylint: disable=no-member
+    fuzz_target) -> (str | None, uworker_msg_pb2.Output | None):  # pylint: disable=no-member
   """Sets up the |testcase| and builds. Returns the path to the testcase on
   success, None on error."""
   # Set up testcase and get absolute testcase path.
@@ -595,6 +594,6 @@ def utask_postprocess(output):
 
 
 def query_testcase_upload_metadata(
-    testcase_id: str) -> Optional[data_types.TestcaseUploadMetadata]:
+    testcase_id: str) -> data_types.TestcaseUploadMetadata | None:
   return data_types.TestcaseUploadMetadata.query(
       data_types.TestcaseUploadMetadata.testcase_id == int(testcase_id)).get()

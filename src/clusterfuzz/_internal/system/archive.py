@@ -21,7 +21,6 @@ import tarfile
 from typing import BinaryIO
 from typing import Callable
 from typing import List
-from typing import Optional
 from typing import Union
 import zipfile
 
@@ -155,7 +154,7 @@ class ArchiveReader(abc.ABC):
 
   def extract_all(self,
                   path: Union[str, os.PathLike],
-                  members: Optional[List[str]] = None,
+                  members: List[str] | None = None,
                   trusted: bool = False) -> bool:
     """Extract the whole archive content or the members listed in `members`.
 
@@ -184,7 +183,7 @@ class ArchiveReader(abc.ABC):
 
     return not error_occurred
 
-  def try_open(self, member: str) -> Optional[BinaryIO]:
+  def try_open(self, member: str) -> BinaryIO | None:
     """Tries to open the archive. Does not throw.
 
     Args:
@@ -383,7 +382,7 @@ class ArchiveError(Exception):
 
 def open(  # pylint: disable=redefined-builtin
     archive_path: str,
-    file_obj: Optional[BinaryIO] = None) -> ArchiveReader:
+    file_obj: BinaryIO | None = None) -> ArchiveReader:
   """Opens the archive and gets the appropriate archive reader based on the
   `archive_path`. If `file_obj` is not none, the binary file-like object will be
   used to read the archive instead of opening `archive_path`.
@@ -531,7 +530,7 @@ class HttpZipFile(io.IOBase):
     inner_end = end - self._current_block.start
     return self._current_block.content[inner_start:inner_end + 1]
 
-  def read(self, size: Optional[int] = -1) -> bytes:
+  def read(self, size: int | None = -1) -> bytes:
     """Read into this file-object.
 
     Args:
@@ -557,7 +556,7 @@ class HttpZipFile(io.IOBase):
     self._pos += read_size
     return content
 
-  def read1(self, size: Optional[int] = -1) -> bytes:
+  def read1(self, size: int | None = -1) -> bytes:
     """Read into the file-object in at most on system call.
     This is exactly similar to the read implementation in our case.
 

@@ -26,7 +26,6 @@ import sys
 from typing import Callable
 from typing import Dict
 from typing import List
-from typing import Optional
 from typing import Sequence
 from typing import Union
 
@@ -59,7 +58,7 @@ def _display_platforms() -> None:
     print(fuzzer_job.platform)
 
 
-def _query_fuzzer_jobs_batches(platforms: Optional[Sequence[str]] = None
+def _query_fuzzer_jobs_batches(platforms: Sequence[str] | None = None
                               ) -> Sequence[data_types.FuzzerJobs]:
   query = data_types.FuzzerJobs.query()
 
@@ -71,9 +70,9 @@ def _query_fuzzer_jobs_batches(platforms: Optional[Sequence[str]] = None
 
 
 def _query_fuzzer_jobs(
-    platforms: Optional[Sequence[str]] = None,
-    fuzzers: Optional[Sequence[str]] = None,
-    jobs: Optional[Sequence[str]] = None,
+    platforms: Sequence[str] | None = None,
+    fuzzers: Sequence[str] | None = None,
+    jobs: Sequence[str] | None = None,
 ) -> Sequence[data_types.FuzzerJob]:
   """Queries Datastore for matching FuzzerJob entries."""
   query = data_types.FuzzerJob.query()
@@ -90,9 +89,9 @@ def _query_fuzzer_jobs(
 
 
 def _query_fuzz_target_jobs(
-    targets: Optional[Sequence[str]] = None,
-    jobs: Optional[Sequence[str]] = None,
-    engines: Optional[Sequence[str]] = None,
+    targets: Sequence[str] | None = None,
+    jobs: Sequence[str] | None = None,
+    engines: Sequence[str] | None = None,
 ) -> Sequence[data_types.FuzzTargetJob]:
   """Queries Datastore for matching FuzzTargetJob entries."""
   query = data_types.FuzzTargetJob.query()
@@ -250,8 +249,8 @@ def _dump_fuzz_target_jobs(
 
 def _fuzzer_job_matches(
     fuzzer_job: data_types.FuzzerJob,
-    fuzzers: Optional[Sequence[str]],
-    jobs: Optional[Sequence[str]],
+    fuzzers: Sequence[str] | None,
+    jobs: Sequence[str] | None,
 ) -> bool:
   """Returns whether the given FuzzerJob matches the given optional filters."""
   if fuzzers and fuzzer_job.fuzzer not in fuzzers:
@@ -295,8 +294,8 @@ def _print_stats(fuzzer_jobs: List[data_types.FuzzerJob],
 
 def _aggregate_fuzzer_jobs(
     platform: str,
-    fuzzers: Optional[Sequence[str]] = None,
-    jobs: Optional[Sequence[str]] = None,
+    fuzzers: Sequence[str] | None = None,
+    jobs: Sequence[str] | None = None,
 ) -> None:
   """Aggregates statistics for matching and non-matching FuzzerJob entries."""
   fuzzer_jobs = list(_query_fuzzer_jobs(platforms=[platform.upper()]))

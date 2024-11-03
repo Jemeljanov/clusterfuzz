@@ -17,7 +17,6 @@ import datetime
 import os
 import shlex
 import time
-from typing import Optional
 import zipfile
 
 from clusterfuzz._internal.base import dates
@@ -663,7 +662,7 @@ def _set_up_data_bundles(update_input: uworker_msg_pb2.SetupInput):  # pylint: d
 
 
 def update_fuzzer_and_data_bundles(
-    update_input: uworker_msg_pb2.SetupInput) -> Optional[data_types.Fuzzer]:  # pylint: disable=no-member
+    update_input: uworker_msg_pb2.SetupInput) -> data_types.Fuzzer | None:  # pylint: disable=no-member
   """Updates the fuzzer specified by |update_input| and its data bundles."""
   fuzzer = uworker_io.entity_from_protobuf(update_input.fuzzer,
                                            data_types.Fuzzer)

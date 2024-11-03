@@ -17,7 +17,6 @@ import json
 import time
 from typing import Dict
 from typing import List
-from typing import Optional
 
 from clusterfuzz._internal.base import bisection
 from clusterfuzz._internal.base import errors
@@ -314,7 +313,7 @@ def _update_issue_metadata(testcase: data_types.Testcase, metadata: Dict):
 
 def _testcase_reproduces_in_revision(
     testcase: data_types.Testcase, testcase_file_path: str, job_type: str,
-    revision: int, fuzz_target: Optional[data_types.FuzzTarget],
+    revision: int, fuzz_target: data_types.FuzzTarget | None,
     progression_task_output: uworker_msg_pb2.ProgressionTaskOutput):  # pylint: disable=no-member
   """Tests to see if a test case reproduces in the specified revision.
   Returns a tuple containing the (result, error) depending on whether

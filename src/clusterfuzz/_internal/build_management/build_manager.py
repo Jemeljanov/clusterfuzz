@@ -20,7 +20,6 @@ import re
 import shutil
 import subprocess
 import time
-from typing import Optional
 
 from clusterfuzz._internal.base import errors
 from clusterfuzz._internal.base import utils
@@ -443,8 +442,8 @@ class Build(BaseBuild):
       shell.remove_file(build_local_archive)
 
   def _open_build_archive(self, base_build_dir: str, build_dir: str,
-                          build_url: str, http_build_url: Optional[str],
-                          unpack_everything: Optional[bool]):
+                          build_url: str, http_build_url: str | None,
+                          unpack_everything: bool | None):
     """Gets a handle on a build archive for the current build. Depending on the
     provided parameters, this function might download the build archive into
     the build directory or directly use remote HTTP archive.

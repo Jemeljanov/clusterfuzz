@@ -18,7 +18,6 @@
 import datetime
 import enum
 from typing import List
-from typing import Optional
 from typing import Sequence
 from typing import Tuple
 import urllib.parse
@@ -112,7 +111,7 @@ def _sanitize_oses(oses: Sequence[str]) -> List[str]:
   return result
 
 
-def _extract_label(labels: Sequence[str], prefix: str) -> Optional[str]:
+def _extract_label(labels: Sequence[str], prefix: str) -> str | None:
   """Extract a label value."""
   for label in labels:
     if not label.startswith(prefix):
@@ -133,7 +132,7 @@ def _get_labels(labels: Sequence[str], prefix: str) -> List[str]:
   return results
 
 
-def _get_oss_fuzz_reported_value(labels: Sequence[str]) -> Optional[dict]:
+def _get_oss_fuzz_reported_value(labels: Sequence[str]) -> dict | None:
   """Return OSS-Fuzz Reported custom field value."""
   added_reported = _extract_label(labels, 'Reported-')
   if not added_reported:
@@ -152,7 +151,7 @@ def _get_oss_fuzz_reported_value(labels: Sequence[str]) -> Optional[dict]:
   }
 
 
-def _get_severity_from_labels(labels: Sequence[str]) -> Optional[str]:
+def _get_severity_from_labels(labels: Sequence[str]) -> str | None:
   """Return the value of the first severity label, if any."""
   # Ignore case to match `issue_tracker.LabelStore.remove_by_prefix()`.
   values = _get_labels((l.lower() for l in labels),

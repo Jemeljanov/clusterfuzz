@@ -18,7 +18,6 @@ import random
 import time
 from typing import Dict
 from typing import List
-from typing import Optional
 
 from clusterfuzz._internal.base import tasks
 from clusterfuzz._internal.bot import testcase_manager
@@ -106,10 +105,10 @@ def _testcase_reproduces_in_revision(
     job_type: str,
     revision: int,
     regression_task_output: uworker_msg_pb2.RegressionTaskOutput,  # pylint: disable=no-member
-    fuzz_target: Optional[data_types.FuzzTarget],
+    fuzz_target: data_types.FuzzTarget | None,
     should_log: bool = True,
-    min_revision: Optional[int] = None,
-    max_revision: Optional[int] = None):
+    min_revision: int | None = None,
+    max_revision: int | None = None):
   """Test to see if a test case reproduces in the specified revision.
   Returns a tuple containing the (result, error) depending on whether
   there was an error."""
@@ -153,9 +152,9 @@ def check_latest_revisions(
     testcase_file_path: str,
     job_type: str,
     revision_range: List[int],
-    fuzz_target: Optional[data_types.FuzzTarget],
+    fuzz_target: data_types.FuzzTarget | None,
     output: uworker_msg_pb2.RegressionTaskOutput,  # pylint: disable=no-member
-) -> Optional[uworker_msg_pb2.Output]:  # pylint: disable=no-member
+) -> uworker_msg_pb2.Output | None:  # pylint: disable=no-member
   """Check if the regression happened near the last revision in a range.
 
   The last revision in `revision_range` is assumed to crash.
@@ -199,9 +198,9 @@ def check_earliest_revisions(
     testcase_file_path: str,
     job_type: str,
     revision_range: List[int],
-    fuzz_target: Optional[data_types.FuzzTarget],
+    fuzz_target: data_types.FuzzTarget | None,
     regression_task_output: uworker_msg_pb2.RegressionTaskOutput,  # pylint: disable=no-member
-) -> Optional[uworker_msg_pb2.Output]:  # pylint: disable=no-member
+) -> uworker_msg_pb2.Output | None:  # pylint: disable=no-member
   """Check that the earliest good build does not crash.
 
   Adds information about any bad builds encountered while running to
@@ -265,8 +264,8 @@ def validate_regression_range(
     revision_list: List[int],
     min_index: int,
     regression_task_output: uworker_msg_pb2.RegressionTaskOutput,  # pylint: disable=no-member
-    fuzz_target: Optional[data_types.FuzzTarget],
-) -> Optional[uworker_msg_pb2.Output]:  # pylint: disable=no-member
+    fuzz_target: data_types.FuzzTarget | None,
+) -> uworker_msg_pb2.Output | None:  # pylint: disable=no-member
   """Ensure that we found the correct min revision by testing earlier ones.
   Returns a uworker_msg_pb2.Output in case of error or crash, None otherwise."""
   earlier_revisions = revision_list[
@@ -446,7 +445,7 @@ def find_regression_range(
 
 
 def utask_preprocess(testcase_id: str, job_type: str,
-                     uworker_env: Dict) -> Optional[uworker_msg_pb2.Input]:  # pylint: disable=no-member
+                     uworker_env: Dict) -> uworker_msg_pb2.Input | None:  # pylint: disable=no-member
   """Prepares inputs for `utask_main()` to run on an untrusted worker.
 
   Runs on a trusted worker.
@@ -486,7 +485,7 @@ def utask_preprocess(testcase_id: str, job_type: str,
 
 def utask_main(
     uworker_input: uworker_msg_pb2.Input,  # pylint: disable=no-member
-) -> Optional[uworker_msg_pb2.Output]:  # pylint: disable=no-member
+) -> uworker_msg_pb2.Output | None:  # pylint: disable=no-member
   """Runs regression task and handles potential errors.
 
   Runs on an untrusted worker.

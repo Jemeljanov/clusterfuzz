@@ -20,7 +20,6 @@ import threading
 import time
 from typing import Dict
 from typing import List
-from typing import Optional
 import zipfile
 
 from clusterfuzz._internal.base import errors
@@ -1387,7 +1386,7 @@ def _run_libfuzzer_tool(
     timeout: int,
     expected_crash_state: str,
     minimize_task_input: uworker_msg_pb2.MinimizeTaskInput,  # pylint: disable=no-member
-    fuzz_target: Optional[data_types.FuzzTarget],
+    fuzz_target: data_types.FuzzTarget | None,
     set_dedup_flags: bool = False):
   """Run libFuzzer tool to either minimize or cleanse."""
   memory_tool_options_var = environment.get_current_memory_tool_var()
@@ -1517,7 +1516,7 @@ def _update_testcase_memory_tool_options(testcase: data_types.Testcase,
 
 
 def do_libfuzzer_minimization(
-    fuzz_target: Optional[data_types.FuzzTarget],
+    fuzz_target: data_types.FuzzTarget | None,
     minimize_task_input: uworker_msg_pb2.MinimizeTaskInput,  # pylint: disable=no-member
     testcase: data_types.Testcase,
     testcase_file_path: str) -> uworker_msg_pb2.Output:  # pylint: disable=no-member
@@ -1654,7 +1653,7 @@ def do_libfuzzer_minimization(
   return uworker_msg_pb2.Output(minimize_task_output=minimize_task_output)  # pylint: disable=no-member
 
 
-def do_libfuzzer_cleanse(fuzz_target: Optional[data_types.FuzzTarget], testcase,
+def do_libfuzzer_cleanse(fuzz_target: data_types.FuzzTarget | None, testcase,
                          testcase_file_path, expected_crash_state,
                          minimize_task_input):
   """Cleanse testcase using libFuzzer."""

@@ -17,7 +17,6 @@ import contextlib
 import enum
 import importlib
 import time
-from typing import Optional
 
 from google.protobuf import timestamp_pb2
 
@@ -91,7 +90,7 @@ class _MetricRecorder(contextlib.AbstractContextManager):
                        job_type: str,
                        execution_mode: Mode,
                        platform: str,
-                       preprocess_start_time: Optional[Timestamp] = None):
+                       preprocess_start_time: Timestamp | None = None):
     """Sets task details that might not be known at instantation time.
 
     Must be called once for metrics to be recorded when exiting the context.

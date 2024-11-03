@@ -21,7 +21,6 @@ import json
 import logging
 from typing import Any
 from typing import Dict
-from typing import Optional
 
 from google.cloud import ndb
 
@@ -160,8 +159,8 @@ def _template_needs_update(current_template, new_template, resource_name):
 
 
 def _auto_healing_policy_to_dict(
-    policy: Optional[compute_engine_projects.AutoHealingPolicy]
-) -> Optional[Dict[str, Any]]:
+    policy: compute_engine_projects.AutoHealingPolicy | None
+) -> Dict[str, Any] | None:
   """Converts `policy` into its JSON API representation.
 
   Returns None if `policy` is None.
@@ -177,7 +176,7 @@ def _auto_healing_policy_to_dict(
 
 def _update_auto_healing_policy(
     instance_group: bot_manager.InstanceGroup, instance_group_body,
-    new_policy: Optional[compute_engine_projects.AutoHealingPolicy]):
+    new_policy: compute_engine_projects.AutoHealingPolicy | None):
   """Updates the given instance group's auto-healing policy if need be."""
   old_policy_dict = None
   policies = instance_group_body.get('autoHealingPolicies')

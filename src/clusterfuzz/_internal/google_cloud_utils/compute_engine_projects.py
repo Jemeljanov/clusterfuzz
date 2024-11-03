@@ -19,7 +19,6 @@ import logging
 import os
 from typing import Any
 from typing import Dict
-from typing import Optional
 
 from clusterfuzz._internal.config import local_config
 from clusterfuzz._internal.system import environment
@@ -76,8 +75,8 @@ class AutoHealingPolicy:
   initial_delay_sec: int
 
   @classmethod
-  def from_config(cls, policy: Optional[Dict[str, Any]],
-                  project_id: str) -> Optional['AutoHealingPolicy']:
+  def from_config(cls, policy: Dict[str, Any] | None,
+                  project_id: str) -> 'AutoHealingPolicy' | None:
     """Attempts to create a policy from the given yaml configuration value."""
     if policy is None:
       return None

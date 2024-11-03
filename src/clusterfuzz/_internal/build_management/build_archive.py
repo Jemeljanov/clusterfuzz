@@ -18,7 +18,6 @@ import os
 from typing import BinaryIO
 from typing import Callable
 from typing import List
-from typing import Optional
 from typing import Union
 
 from clusterfuzz._internal.metrics import logs
@@ -101,7 +100,7 @@ class BuildArchive(archive.ArchiveReader):
     raise NotImplementedError
 
   @abc.abstractmethod
-  def unpacked_size(self, fuzz_target: Optional[str] = None) -> int:
+  def unpacked_size(self, fuzz_target: str | None = None) -> int:
     """Gets the total extracted size for the files returned by
     `get_target_dependencies`. In other words this returns the necessary space
     needed in order for the fuzz_target to run correctly.
@@ -119,7 +118,7 @@ class BuildArchive(archive.ArchiveReader):
   @abc.abstractmethod
   def unpack(self,
              build_dir: str,
-             fuzz_target: Optional[str] = None,
+             fuzz_target: str | None = None,
              trusted: bool = False) -> bool:
     """Unpacks the build to build_dir. During this operation, all the
     fuzz_target dependencies will be computed in order to unpack all the
@@ -196,7 +195,7 @@ class DefaultBuildArchive(BuildArchive):
 
     return list(self._fuzz_targets.keys())
 
-  def unpacked_size(self, fuzz_target: Optional[str] = None) -> int:
+  def unpacked_size(self, fuzz_target: str | None = None) -> int:
     if not fuzz_target:
       return self.extracted_size()
 
@@ -205,7 +204,7 @@ class DefaultBuildArchive(BuildArchive):
 
   def unpack(self,
              build_dir: str,
-             fuzz_target: Optional[str] = None,
+             fuzz_target: str | None = None,
              trusted: bool = False) -> bool:
     if not fuzz_target:
       return self.extract_all(build_dir, trusted=trusted)

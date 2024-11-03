@@ -1138,7 +1138,7 @@ def check_for_bad_build(job_type: str,
       cannot be used for executing testcases.
     should_ignore_crash (bool): True iff the target crashed, but we should
       ignore it.
-    build_run_console_output (Optional[str]): The build run output, containing
+    build_run_console_output (str | None): The build run output, containing
       crash stacktraces (if any).
   """
   # Check the bad build check flag to see if we want do this.

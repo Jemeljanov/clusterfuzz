@@ -19,7 +19,6 @@ import re
 import stat
 import tempfile
 from typing import Callable
-from typing import Optional
 
 from clusterfuzz._internal.base import utils
 from clusterfuzz._internal.metrics import logs
@@ -33,7 +32,7 @@ BLOCKLISTED_TARGET_NAME_REGEX = re.compile(r'^(jazzer_driver.*)$')
 EXTRA_BUILD_DIR = '__extra_build'
 
 
-def is_fuzz_target(file_path, file_opener: Optional[Callable] = None):
+def is_fuzz_target(file_path, file_opener: Callable | None = None):
   """Returns whether |file_path| is a fuzz target binary (local path)."""
   if '@' in file_path:
     # GFT targets often have periods in the name that get misinterpreted as an

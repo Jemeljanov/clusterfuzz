@@ -18,7 +18,6 @@ import contextlib
 import itertools
 import multiprocessing
 from typing import List
-from typing import Optional
 from typing import Tuple
 
 import aiohttp
@@ -41,7 +40,7 @@ def _pool(pool_size=_POOL_SIZE):
     yield futures.ProcessPoolExecutor(pool_size)
 
 
-def download_urls(urls: List[str], filepaths: List[str]) -> List[Optional[str]]:
+def download_urls(urls: List[str], filepaths: List[str]) -> List[str] | None:
   """Downloads multiple |urls| to |filepaths| in parallel and
   asynchronously. Tolerates errors. Returns a list of whether each
   download was successful."""
@@ -64,13 +63,13 @@ def download_urls(urls: List[str], filepaths: List[str]) -> List[Optional[str]]:
 
 
 def _download_files(
-    urls_and_paths: List[Tuple[str, str]]) -> List[Optional[str]]:
+    urls_and_paths: List[Tuple[str, str]]) -> List[str] | None:
   urls, paths = list(zip(*urls_and_paths))
   return asyncio.run(_async_download_files(list(urls), list(paths)))
 
 
 async def _async_download_files(urls: List[str],
-                                paths: List[str]) -> List[Optional[str]]:
+                                paths: List[str]) -> List[str] | None:
   async with aiohttp.ClientSession() as session:
     tasks = [
         asyncio.create_task(_error_tolerant_download_file(session, url, path))
@@ -80,7 +79,7 @@ async def _async_download_files(urls: List[str],
 
 
 async def _error_tolerant_download_file(session: aiohttp.ClientSession,
-                                        url: str, path: str) -> Optional[str]:
+                                        url: str, path: str) -> str | None:
   try:
     await _async_download_file(session, url, path)
     return url

@@ -20,7 +20,6 @@ import random
 import threading
 import time
 from typing import List
-from typing import Optional
 
 from clusterfuzz._internal.base import external_tasks
 from clusterfuzz._internal.base import persistent_cache
@@ -475,7 +474,7 @@ class PubSubTask(Task):
     self._pubsub_message.ack()
 
 
-def get_task_from_message(message) -> Optional[PubSubTask]:
+def get_task_from_message(message) -> PubSubTask | None:
   """Returns a task constructed from the first of |messages| if possible."""
   if message is None:
     return None
